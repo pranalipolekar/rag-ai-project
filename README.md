@@ -30,7 +30,7 @@ This RAG bot:
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/ashutoshnawale89/rag-ai-project.git
 cd AI-PROJECT
 ```
 
