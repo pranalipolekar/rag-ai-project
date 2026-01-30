@@ -1,11 +1,11 @@
-# AI-PROJECT - RAG Q&A Support Bot
+# rag-ai-project - RAG Q&A Support Bot
 
 A complete **Retrieval Augmented Generation (RAG)** system that crawls websites, generates embeddings using OpenAI, stores them in a FAISS vector database, and answers user questions using only the crawled content.
 
 ## 📁 Project Structure
 
 ```
-AI-PROJECT/
+rag-ai-project/
 ├── .github/              # GitHub configuration
 ├── .venv/                # Python virtual environment
 ├── main.py               # Main application file
@@ -31,7 +31,7 @@ This RAG bot:
 
 ```bash
 git clone https://github.com/ashutoshnawale89/rag-ai-project.git
-cd AI-PROJECT
+cd rag-ai-project
 ```
 
 ### 2. Set Up Virtual Environment
