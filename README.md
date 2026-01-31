@@ -1,36 +1,36 @@
 # rag-ai-project - RAG Q&A Support Bot
 
-A complete **Retrieval Augmented Generation (RAG)** system that crawls websites, generates embeddings using OpenAI, stores them in a FAISS vector database, and answers user questions using only the crawled content.
-
+A **Retrival Augmented Generation (RAG)** application that scrapes web content, transforms it into embeddings with OpenAI, stores vectors in FAISS, and answers questions using only the ingested pages.
 ## 📁 Project Structure
 
 ```
-rag-ai-project/
-├── .github/              # GitHub configuration
-├── .venv/                # Python virtual environment
-├── main.py               # Main application file
-├── README.md             # This file
-└── requirements.txt      # Python dependencies
+rag-ai-project/ contains:
+|--.github/ — CI and GitHub config
+|--.venv/ — Python virtual environment
+|--main.py — Application entry point
+|--README.md — This document
+|--requirements.txt — Dependency list
 ```
 
-## 🎯 What This Project Does
+
+
+
+## 🎯 What This System Does
 
 This RAG bot:
-1. **Crawls** a website (W3Schools Python tutorial)
-2. **Cleans** the text content
-3. **Chunks** text into manageable pieces
-4. **Generates embeddings** using OpenAI API
-5. **Stores** embeddings in FAISS vector database
-6. **Retrieves** relevant content for user questions
-7. **Generates answers** using GPT-4 based only on crawled content
-8. **Serves** answers via FastAPI endpoint
-
+1. Crawl a target website (example: W3Schools Python tutorial)
+2. Clean and extract meaningful text
+3. Split text into chunks
+4. Create embeddings via OpenAI
+5. Persist vectors in a FAISS index
+6. Retrieve relevant chunks for a query
+7. Generate answers with GPT-4 constrained to retrieved content
+8. Expose results through a FastAPI endpoint
+           
+```bash  
 ## 🚀 Quick Start
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/ashutoshnawale89/rag-ai-project.git
+1. Clone the repository
+git clone https://github.com/pranalipolekar/rag-ai-project.git
 cd rag-ai-project
 ```
 
@@ -75,7 +75,7 @@ python main.py
 
 The server will start on `http://localhost:8000`
 
-## 📋 Requirements
+## 📋 Dependencies
 
 The `requirements.txt` file should contain:
 
@@ -90,7 +90,7 @@ pydantic==2.5.0
 numpy==1.24.3
 ```
 
-## 🔧 Configuration
+## 🔧 Configuration values
 
 Edit these variables in `main.py`:
 
@@ -198,43 +198,23 @@ console.log(data.answer);
 
 ## 🔍 How It Works
 
-### RAG Workflow
+### RAG  Pipeline (Overview)
+1. **Crawling**: Start from `START_URL`, follow internal links up to `MAX_PAGES`.
+2. **Text Extraction**: Use BeautifulSoup to extract and clean text.
+3. **Chunking**: Split text into chunks of `CHUNK_SIZE` words with `CHUNK_OVERLAP`.
+4. **Embedding**: Generate embeddings for each chunk using OpenAI's API.
+5. **Vector Store**: Store embeddings in FAISS for efficient similarity search.
+6. **Query Handling**:
+   - Receive question via FastAPI.
+   - Generate embedding for the question.
+   - Retrieve top relevant chunks from FAISS.
+   - Use GPT-4 to generate an answer based solely on retrieved chunks.
+   - Return answer and source metadata.
+   - Expose endpoints for health check and stats.
 
 ```
-┌─────────────┐
-│  1. CRAWL   │  Scrape website pages
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  2. CLEAN   │  Remove scripts, nav, etc.
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  3. CHUNK   │  Split into 400-word chunks
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  4. EMBED   │  Generate OpenAI embeddings
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  5. STORE   │  Save in FAISS vector DB
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│  6. QUERY   │  User asks question
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│ 7. RETRIEVE │  Find similar chunks
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│ 8. GENERATE │  GPT-4 generates answer
-└─────────────┘
-```
 
-## 🛠️ Development
+## 🛠️ Development Tips
 
 ```bash
 pip install -r requirements.txt
@@ -254,13 +234,15 @@ taskkill /PID <PID> /F
 lsof -ti:8000 | xargs kill -9
 ```
 
-### Issue: "Vector store not initialized"
-**Solution:** Wait for the startup process to complete. It takes 1-2 minutes to crawl and build the vector store.
+### Common Issues: 
 
-### Issue: "Rate limit exceeded"
-**Solution:** You've hit OpenAI API rate limits. Wait a few minutes or reduce `MAX_PAGES`.
+## "Vector store not initialized"
+Vector store not ready: wait 1–2 minutes for crawling and index building.
 
-## 🔒 Security Notes
+## "Rate limit exceeded"
+Rate limits: reduce MAX_PAGES or wait; OpenAI limits may apply.
+
+## 🔒 Security
 
 - **Never commit** your OpenAI API key to GitHub
 - Add `.env` to `.gitignore`
@@ -272,17 +254,16 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-## 📈 Scaling Considerations
+## 📈 Scaling suggestions
 
-### For Production:
+### For Production considerations:
 
-1. **Cache embeddings**: Save to disk to avoid re-generating
-2. **Use async**: Make crawling concurrent
-3. **Add rate limiting**: Prevent API abuse
-4. **Database**: Use PostgreSQL with pgvector instead of in-memory FAISS
-5. **Authentication**: Add API key authentication
-6. **Monitoring**: Add logging and metrics
-7. **Docker**: Containerize the application
+1. Persisting cached embeddings to disk or database
+2. Asynchronous and concurrent crawling
+3. Rate limiting client requests
+4. Moving from FAISS in-memory to a durable store (e.g., PostgreSQL with pgvector)
+5. Adding authentication and monitoring
+6. Containerizing with Docke
 
 ### Example Production Architecture:
 
@@ -300,9 +281,8 @@ load_dotenv()
 
 ```
 
-## 📝 Example Questions
+## 📝 Sample questions to try
 
-Try asking:
 - "What is Python?"
 - "How do I create a list?"
 - "What are Python functions?"
@@ -311,5 +291,3 @@ Try asking:
 - "How do I handle errors in Python?"
 
 ---
-
-**Made with ❤️ for learning RAG systems**
